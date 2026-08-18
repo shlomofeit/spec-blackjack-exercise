@@ -11,6 +11,7 @@ export async function getCollection() {
 
 export async function newPlayer() {
   const collection = await getCollection();
+
   const result = await collection.insertOne({
     chips: 1000,
     createdAt: new Date().toISOString(),
