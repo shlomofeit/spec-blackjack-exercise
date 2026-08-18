@@ -1,0 +1,4 @@
+node_modules
+.env
+package-lock.json
+spec-blackjack-exercise.md
