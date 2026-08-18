@@ -9,9 +9,9 @@ export async function getCollection() {
   return collection;
 }
 
-export async function newUser(obj) {
+export async function newUser() {
   const collection = await getCollection();
-  const result = await collection.insertOne(obj);
+  const result = await collection.insertOne();
 
   return result.insertedId;
 }
@@ -40,7 +40,7 @@ async function chipsUpdate(id, chips) {
   return result;
 }
 
-export const baseRepo = {
+export const playerRepo = {
   getCollection,
   newUser,
   getById,
