@@ -1,5 +1,5 @@
 import { getMongo } from "../db/mongo.js";
-import { Collection } from "mongodb";
+import { Collection, ObjectId } from "mongodb";
 
 export async function getCollection() {
   const db = await getMongo();
@@ -13,12 +13,12 @@ export async function newRound(obj) {
   const collection = await getCollection();
   const result = await collection.insertOne(obj);
 
-  return result.insertedId;
+  return result.insertedId.toString();
 }
 
 async function getRoundById(roundId) {
   const collection = await getCollection();
-  const result = await collection.findOne({ _id: roundId });
+  const result = await collection.findOne({ _id: new ObjectId(roundId) });
   return result;
 }
 
