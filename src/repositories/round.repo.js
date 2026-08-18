@@ -16,6 +16,12 @@ export async function newRound(obj) {
   return result.insertedId;
 }
 
+async function getRoundById(roundId) {
+  const collection = await getCollection();
+  const result = await collection.findOne({ _id: roundId });
+  return result;
+}
+
 async function getActiveRoundByPlayerId(playerId) {
   const collection = await getCollection();
   const result = await collection.findOne({
@@ -43,10 +49,11 @@ async function addCard(id, hand, cardObj) {
   return result;
 }
 
-export const baseRepo = {
+export const rounRepo = {
   getCollection,
-  newUser,
-  getById,
-  updateById,
-  chipsUpdate,
+  newRound,
+  getRoundById,
+  getActiveRoundByPlayerId,
+  statusUpdate,
+  addCard,
 };
