@@ -1,7 +1,8 @@
 import { errCreator } from "../utils.js";
 import { playerRepo } from "../repositories/player.repo.js";
 import { roundRepo } from "../repositories/round.repo.js";
-export function getRandomCard() {
+
+function getRandomCard() {
   // prettier-ignore
   const rank = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
   const suit = ["hearts", "diamonds", "clubs", "spades"];
@@ -19,7 +20,7 @@ async function createRoundService(bet, player) {
   const activeRound = await roundRepo.getActiveRoundByPlayerId(player.id);
 
   if (!activeRound) {
-    throw errCreator(409, "There are already open round in progress");
+    throw errCreator(409, "There are already round with 'in progress' status");
   }
 
   const newRound = {
@@ -45,4 +46,4 @@ async function createRoundService(bet, player) {
   return res;
 }
 
-export const playerService = { createPlayerService };
+export const roundService = { createRoundService };

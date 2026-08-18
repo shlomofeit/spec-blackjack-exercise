@@ -49,7 +49,7 @@ async function addCard(id, hand, cardObj) {
   return result;
 }
 
-export const rounRepo = {
+export const roundRepo = {
   getCollection,
   newRound,
   getRoundById,
