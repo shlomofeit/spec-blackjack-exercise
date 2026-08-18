@@ -9,11 +9,14 @@ export async function getCollection() {
   return collection;
 }
 
-export async function newUser() {
+export async function newPlayer() {
   const collection = await getCollection();
-  const result = await collection.insertOne();
+  const result = await collection.insertOne({
+    chips: 1000,
+    createdAt: new Date().toISOString(),
+  });
 
-  return result.insertedId;
+  return result.insertedId.toString();
 }
 
 async function getById(id) {
@@ -42,7 +45,7 @@ async function chipsUpdate(id, chips) {
 
 export const playerRepo = {
   getCollection,
-  newUser,
+  newPlayer,
   getById,
   updateById,
   chipsUpdate,
