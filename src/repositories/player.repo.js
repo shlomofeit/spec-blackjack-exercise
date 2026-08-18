@@ -18,14 +18,14 @@ export async function newUser(obj) {
 
 async function getById(id) {
   const collection = await getCollection();
-  const result = await collection.findOne({ _id: id });
+  const result = await collection.findOne({ _id: new ObjectId(id) });
   return result;
 }
 
 async function updateById(id, chips) {
   const collection = await getCollection();
   const result = await collection.findOneAndUpdate(
-    { _id: id },
+    { _id: new ObjectId(id) },
     { $inc: { chips: -chips } },
   );
   return result;
@@ -34,7 +34,7 @@ async function updateById(id, chips) {
 async function chipsUpdate(id, chips) {
   const collection = await getCollection();
   const result = await collection.findOneAndUpdate(
-    { _id: id },
+    { _id: new ObjectId(id) },
     { $set: { chips: -chips } },
   );
   return result;
