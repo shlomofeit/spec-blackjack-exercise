@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 function errorHandler(err, req, res, next) {
-  res.status(err.status).end(err.message);
+  res.status(err.status).json(err.message);
 }
 
 const app = express();
