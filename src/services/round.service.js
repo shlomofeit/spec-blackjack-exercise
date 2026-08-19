@@ -1,16 +1,16 @@
-import { errCreator } from "../utils.js";
+import { cardCalculator, errCreator } from "../utils.js";
 import { playerRepo } from "../repositories/player.repo.js";
 import { roundRepo } from "../repositories/round.repo.js";
 import { ObjectId } from "mongodb";
 
 function getRandomCard() {
   // prettier-ignore
-  const rank = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-  const suit = ["hearts", "diamonds", "clubs", "spades"];
+  const ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+  const suits = ["hearts", "diamonds", "clubs", "spades"];
 
-  const randomRank = rank[Math.floor(Math.random() * rank.length)];
-  const randomSuit = suit[Math.floor(Math.random() * suit.length)];
-  return { randomRank, randomSuit };
+  const randomRank = ranks[Math.floor(Math.random() * ranks.length)];
+  const randomSuit = suits[Math.floor(Math.random() * suits.length)];
+  return { rank: randomRank, suit: randomSuit };
 }
 
 async function createRoundService(bet, player) {
@@ -55,4 +55,32 @@ async function createRoundService(bet, player) {
   return res;
 }
 
-export const roundService = { createRoundService };
+export async function hitService(playerId) {
+  const activeRound = await roundRepo.getActiveRoundByPlayerId(playerId);
+
+  if (!activeRound) {
+    throw errCreator(404, "There is no round with 'in progress' status");
+  }
+  const newCard = getRandomCard();
+  let updatedRound = await roundRepo.addCard(
+    activeRound._id,
+    "playerCards",
+    newCard,
+  );
+
+  const totalHand = cardCalculator(updatedRound.playerCards);
+
+  if (totalHand > 21) {
+    // לבדוק אם צריך לשנות לסטרינג
+    updatedRound = await roundRepo.statusUpdate(activeRound._id, "player_bust");
+    const player = await playerRepo.getById(playerId);
+    return {
+      playerCards: updatedRound.playerCards,
+      playerTotal: totalHand,
+      status: updatedRound.status,
+      chips: player.chips,
+    };
+  }
+}
+
+export const roundService = { createRoundService, hitService };
