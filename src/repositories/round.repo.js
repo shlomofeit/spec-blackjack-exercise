@@ -25,7 +25,7 @@ async function getRoundById(roundId) {
 async function getActiveRoundByPlayerId(playerId) {
   const collection = await getCollection();
   const result = await collection.findOne({
-    playerId: new ObjectId(playerId),
+    playerId,
     status: "in_progress",
   });
   return result;
