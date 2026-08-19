@@ -1,3 +1,4 @@
+import { roundRepo } from "../repositories/round.repo.js";
 import { roundService } from "../services/round.service.js";
 import express from "express";
 
@@ -7,9 +8,18 @@ export async function createRoundController(req, res, next) {
       req.body.bet,
       req.body.player,
     );
-    console.log(result);
-
     return res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getRound(req, res, next) {
+  try {
+    const roundId = req.params.roundId;
+    const result = await roundRepo.getRoundById(roundId);
+    console.log(`The result is: ${JSON.stringify(result)}`);
+    return res.status(200).json(JSON.stringify(result));
   } catch (error) {
     next(error);
   }
