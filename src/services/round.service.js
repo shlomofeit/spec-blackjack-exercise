@@ -83,4 +83,46 @@ export async function hitService(playerId) {
   }
 }
 
+export async function standService(playerId) {
+  const activeRound = await roundRepo.getActiveRoundByPlayerId(playerId);
+
+  if (!activeRound) {
+    throw errCreator(404, "There is no round with 'in progress' status");
+  }
+  const totalPlayerHand = cardCalculator(activeRound.playerCards);
+  let totalHand = cardCalculator(activeRound.dealerCards);
+  let updatedRound;
+  while (totalHand < 17) {
+    const newCard = getRandomCard();
+    updatedRound = await roundRepo.addCard(
+      activeRound._id,
+      "dealerCards",
+      newCard,
+    );
+    totalHand = cardCalculator(updatedRound.dealerCards);
+  }
+  let status;
+  if (totalHand > 21) {
+    status = "dealer_bust";
+  } else {
+    if (totalPlayerHand > totalHand) {
+      status = "player_win";
+    } else if (totalPlayerHand < totalHand) {
+      status = "dealer_win";
+    } else {
+      status = "push";
+    }
+  }
+  updatedRound = await roundRepo.statusUpdate(activeRound._id, status);
+  const player = await playerRepo.getById(playerId);
+  return {
+    playerCards: updatedRound.playerCards,
+    dealerCards: updatedRound.dealerCards,
+    playerTotal: totalPlayerHand,
+    dealerTotal: totalHand,
+    status: updatedRound.status,
+    chips: player.chips,
+  };
+}
+
 export const roundService = { createRoundService, hitService };
