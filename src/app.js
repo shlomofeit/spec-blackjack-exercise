@@ -1,8 +1,13 @@
 import express from "express";
-import router from "./routes/player.route.js";
+import playerRouter from "./routes/player.route.js";
+import roundRouter from "./routes/round.route.js";
 import dotenv from "dotenv";
 
 dotenv.config();
+
+function errorHandler(err, req, res, next) {
+  res.status(err.status).end(err.message);
+}
 
 const app = express();
 
@@ -13,7 +18,10 @@ app.use("/", (req, res, next) => {
   next();
 });
 
-app.use("/start-game", router);
+app.use("/start-game", playerRouter);
+app.use("/start-round", roundRouter);
+app.use("/", roundRouter);
+app.use(errorHandler);
 
 app.listen(3000, () => {
   console.log("Listening on port 3000...");
