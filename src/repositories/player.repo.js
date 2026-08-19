@@ -1,5 +1,5 @@
 import { getMongo } from "../db/mongo.js";
-import { Collection } from "mongodb";
+import { Collection, ObjectId } from "mongodb";
 
 export async function getCollection() {
   const db = await getMongo();
@@ -26,11 +26,11 @@ async function getById(id) {
   return result;
 }
 
-async function updateById(id, chips) {
+async function updateById(id, obj) {
   const collection = await getCollection();
   const result = await collection.findOneAndUpdate(
     { _id: new ObjectId(id) },
-    { $inc: { chips: -chips } },
+    { $set: obj },
   );
   return result;
 }
@@ -39,9 +39,10 @@ async function chipsUpdate(id, chips) {
   const collection = await getCollection();
   const result = await collection.findOneAndUpdate(
     { _id: new ObjectId(id) },
-    { $set: { chips: -chips } },
+    { $inc: { chips: -chips } },
+    { returnDocument: "after" },
   );
-  return result;
+  return result.chips;
 }
 
 export const playerRepo = {
