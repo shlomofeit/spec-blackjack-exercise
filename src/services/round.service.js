@@ -1,6 +1,7 @@
 import { errCreator } from "../utils.js";
 import { playerRepo } from "../repositories/player.repo.js";
 import { roundRepo } from "../repositories/round.repo.js";
+import { ObjectId } from "mongodb";
 
 function getRandomCard() {
   // prettier-ignore
@@ -13,35 +14,43 @@ function getRandomCard() {
 }
 
 async function createRoundService(bet, player) {
-  if (!bet > 0 || !player.chips >= bet) {
+  if (bet <= 0 || player.chips < bet) {
     throw errCreator(400, "Not enogh chips or incorrect bet");
   }
 
-  const activeRound = await roundRepo.getActiveRoundByPlayerId(player.id);
+  const activeRound = await roundRepo.getActiveRoundByPlayerId(player._id);
 
-  if (!activeRound) {
+  if (activeRound) {
     throw errCreator(409, "There are already round with 'in progress' status");
   }
+  const card1 = getRandomCard();
+  const card2 = getRandomCard();
+  const card3 = getRandomCard();
+  const card4 = getRandomCard();
 
   const newRound = {
-    ...player,
-    playerCards: [getRandomCard(), getRandomCard()],
-    dealerCards: [getRandomCard(), getRandomCard()],
-    status: "in_prgress",
+    playerId: player._id,
+    bet,
+    playerCards: [card1, card2],
+    dealerCards: [card3, card4],
+    status: "in_progress",
     createdAt: new Date().toISOString(),
   };
-  const roundId = await rounRepo.newRound(newRound);
-  const round = await rounRepo.getRoundById(roundId);
-  if (!round) {
-    throw errCreator();
-  }
-  const updatedPlayer = await playerRepo.chipsUpdate(player.id, bet);
 
+  const roundId = await roundRepo.newRound(newRound);
+  const round = await roundRepo.getRoundById(roundId);
+  if (!round) {
+    throw errCreator(
+      500,
+      "round not found (new round was created! pls check it.)",
+    );
+  }
+  const updatedPlayer = await playerRepo.chipsUpdate(player._id, bet);
   const res = {
     id: roundId,
-    playerCards: round.playerCards,
-    dealerUpCard: round.dealerCards[0],
-    chips: updatedPlayer.chips,
+    playerCards: newRound.playerCards,
+    dealerUpCard: newRound.dealerCards[0],
+    chips: updatedPlayer,
   };
   return res;
 }
