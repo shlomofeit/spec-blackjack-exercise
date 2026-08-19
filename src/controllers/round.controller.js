@@ -18,8 +18,7 @@ export async function getRound(req, res, next) {
   try {
     const roundId = req.params.roundId;
     const result = await roundRepo.getRoundById(roundId);
-    console.log(`The result is: ${JSON.stringify(result)}`);
-    return res.status(200).json(JSON.stringify(result));
+    return res.status(200).json(result);
   } catch (error) {
     next(error);
   }
