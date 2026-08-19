@@ -14,6 +14,18 @@ export async function createRoundController(req, res, next) {
   }
 }
 
+export async function hitRound(req, res, next) {
+  try {
+    const playerId = req.params.playerId;
+
+    const result = await roundService.hitService(playerId);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getRound(req, res, next) {
   try {
     const roundId = req.params.roundId;
