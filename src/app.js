@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 function errorHandler(err, req, res, next) {
-  res.status(err.status).json(err.message);
+  res.status(err.status || 500).json(err.message);
 }
 
 const app = express();
@@ -19,7 +19,6 @@ app.use("/", (req, res, next) => {
 });
 
 app.use("/start-game", playerRouter);
-app.use("/start-round", roundRouter);
 app.use("/", roundRouter);
 app.use(errorHandler);
 
