@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./index.css" />
+    <script type="module" src="./index.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blackjack</title>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-title">
+        <h1 class="title">BLACKJACK CLUB</h1>
+      </div>
+    </header>
+    <nav class="nav-">
+      <ul class="menu">
+        <li class="reset-game">
+          <a href="" class="reset-btn">Reset game</a>
+        </li>
+      </ul>
+    </nav>
+    <main class="main">
+      <section class="game-details" id="game-details">
+        <div class="game-details-box">
+          <div class="player-details box">
+            <p class="chips" id="chips">chips: 0</p>
+          </div>
+          <div class="current-game box">
+            <div class="game-status">
+              <p class="status" id="status">status: ###</p>
+            </div>
+            <div class="bet">
+              <p class="bet-p" id="bet-p">bet: 0</p>
+            </div>
+            <!-- <div class="dealer-cards">
+              <p class="dealer-cards-p cards" id="dealer-cards-p">
+                Dealer cards: 0
+              </p>
+            </div> -->
+            <div class="player-cards dealer-cards">
+              <p class="player-cards-p cards" id="player-cards-p">
+                Dealer cards: 0
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="start-round" id="start-round">
+        <label for="bet"></label>
+        <input
+          class="bet-input"
+          type="number"
+          placeholder="Enter bet"
+          id="bet"
+          inputmode="numeric"
+        />
+        <a href="" class="btn" id="start-round-btn">START ROUND</a>
+      </div>
+      <section class="card-area">
+        <section class="player-box card-section">
+          <div class="cards-box" id="player-box">
+            <!-- <div class="card">
+
+          </div> -->
+        </section>
+        <section class="play-btns">
+          <div class="btns">
+            <a href="" class="stand btn">STAND</a>
+            <a href="" class="hit btn">HIT</a>
+          </div>
+        </section>
+        <section class="dealer-box card-section">
+          <div class="cards-box" id="dealer-box">
+            <!-- <div class="card">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/1/1438.png"
+                alt=""
+                class="suit"
+              />
+              <h3 class="rank">TTT</h3>
+            </div>
+            <div class="card">
+              <img
+                src="   https://cdn-icons-png.flaticon.com/512/6446/6446503.png "
+                alt=""
+                class="suit"
+              />
+              <h3 class="rank">YYY</h3>
+            </div> -->
+          </div>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
