@@ -3,6 +3,6 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/", playerController.createPlayerController);
+router.post("/start-game", playerController.createPlayerController);
 
 export default router;
