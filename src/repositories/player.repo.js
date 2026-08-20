@@ -23,6 +23,7 @@ export async function newPlayer() {
 async function getById(id) {
   const collection = await getCollection();
   const result = await collection.findOne({ _id: new ObjectId(id) });
+  result._id = result._id.toString();
   return result;
 }
 
