@@ -13,7 +13,8 @@ function getRandomCard() {
   return { rank: randomRank, suit: randomSuit };
 }
 
-async function createRoundService(bet, player) {
+async function createRoundService(bet, playerId) {
+  const player = await playerRepo.getById(playerId);
   if (bet <= 0 || player.chips < bet) {
     throw errCreator(400, "Not enogh chips or incorrect bet");
   }
@@ -71,7 +72,6 @@ export async function hitService(playerId) {
   const totalHand = cardCalculator(updatedRound.playerCards);
 
   if (totalHand > 21) {
-    // לבדוק אם צריך לשנות לסטרינג
     updatedRound = await roundRepo.statusUpdate(activeRound._id, "player_bust");
     const player = await playerRepo.getById(playerId);
     return {
@@ -125,4 +125,4 @@ export async function standService(playerId) {
   };
 }
 
-export const roundService = { createRoundService, hitService };
+export const roundService = { createRoundService, hitService, standService };
