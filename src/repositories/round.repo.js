@@ -31,11 +31,12 @@ async function getActiveRoundByPlayerId(playerId) {
   return result;
 }
 
-async function statusUpdate(id, status) {
+async function statusUpdate(roundId, status) {
   const collection = await getCollection();
   const result = await collection.findOneAndUpdate(
-    { _id: new ObjectId(id) },
+    { _id: new ObjectId(roundId) },
     { $set: { status } },
+    { returnDocument: "after" },
   );
   return result;
 }
@@ -45,6 +46,7 @@ async function addCard(id, hand, cardObj) {
   const result = await collection.findOneAndUpdate(
     { _id: new ObjectId(id) },
     { $push: { [hand]: cardObj } },
+    { returnDocument: "after" },
   );
   return result;
 }
