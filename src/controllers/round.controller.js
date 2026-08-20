@@ -43,6 +43,7 @@ export async function standRound(req, res, next) {
 export async function getRound(req, res, next) {
   try {
     const playerId = req.playerId;
+    const player = await playerRepo.getById(playerId);
     const result = await roundRepo.getActiveRoundByPlayerId(playerId);
     const myRoundRes = result
       ? {
@@ -51,6 +52,7 @@ export async function getRound(req, res, next) {
           dealerUpCard: result.dealerCards[0],
           bet: result.bet,
           status: result.status,
+          chips: player.chips,
         }
       : { round: null };
     return res.status(200).json(myRoundRes);
