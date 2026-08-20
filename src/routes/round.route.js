@@ -1,11 +1,16 @@
 import * as roundController from "../controllers/round.controller.js";
 import express from "express";
+import { getPlayerByHeader } from "../middlewares/round.middleware.js";
 
 const router = express.Router();
 
-router.post("/", roundController.createRoundController);
-
-// for tests
-router.get("/get-round/:roundId", roundController.getRound);
+router.post(
+  "/start-round",
+  getPlayerByHeader,
+  roundController.createRoundController,
+);
+router.post("/hit/:playerId", getPlayerByHeader, roundController.hitRound);
+router.post("/stand/:playerId", getPlayerByHeader, roundController.standRound);
+router.get("/my-round/", getPlayerByHeader, roundController.getRound);
 
 export default router;
