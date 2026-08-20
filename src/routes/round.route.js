@@ -9,8 +9,8 @@ router.post(
   getPlayerByHeader,
   roundController.createRoundController,
 );
-router.post("/hit/:playerId", getPlayerByHeader, roundController.hitRound);
-router.post("/stand/:playerId", getPlayerByHeader, roundController.standRound);
-router.get("/my-round/", getPlayerByHeader, roundController.getRound);
+router.post("/hit", getPlayerByHeader, roundController.hitRound);
+router.post("/stand", getPlayerByHeader, roundController.standRound);
+router.get("/my-round", getPlayerByHeader, roundController.getRound);
 
 export default router;
