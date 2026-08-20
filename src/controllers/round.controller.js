@@ -1,12 +1,14 @@
+import { playerRepo } from "../repositories/player.repo.js";
 import { roundRepo } from "../repositories/round.repo.js";
 import { roundService } from "../services/round.service.js";
 import express from "express";
+import { errCreator } from "../utils.js";
 
 export async function createRoundController(req, res, next) {
   try {
     const result = await roundService.createRoundService(
       req.body.bet,
-      req.body.player,
+      req.playerId,
     );
     return res.status(201).json(result);
   } catch (error) {
@@ -16,7 +18,7 @@ export async function createRoundController(req, res, next) {
 
 export async function hitRound(req, res, next) {
   try {
-    const playerId = req.params.playerId;
+    const playerId = req.playerId;
 
     const result = await roundService.hitService(playerId);
 
@@ -26,11 +28,32 @@ export async function hitRound(req, res, next) {
   }
 }
 
+export async function standRound(req, res, next) {
+  try {
+    const playerId = req.playerId;
+
+    const result = await roundService.standService(playerId);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getRound(req, res, next) {
   try {
-    const roundId = req.params.roundId;
-    const result = await roundRepo.getRoundById(roundId);
-    return res.status(200).json(result);
+    const playerId = req.playerId;
+    const result = await roundRepo.getActiveRoundByPlayerId(playerId);
+    const myRoundRes = result
+      ? {
+          roundId: result._id,
+          playerCards: result.playerCards,
+          dealerUpCard: result.dealerCards[0],
+          bet: result.bet,
+          status: result.status,
+        }
+      : { round: null };
+    return res.status(200).json(myRoundRes);
   } catch (error) {
     next(error);
   }
