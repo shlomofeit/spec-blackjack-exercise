@@ -39,6 +39,17 @@ img {
   text-shadow: 2px 2px 5px white;
 }
 
+.total-box {
+  background-color: antiquewhite;
+  border-radius: 9px;
+  color: black;
+  padding: 1.4rem;
+  font-weight: bold;
+  font-size: large;
+  display: flex;
+  align-items: center;
+}
+
 .menu {
   display: flex;
   justify-content: left;

@@ -15,18 +15,44 @@ const chipsDetail = document.querySelector("#chips");
 const statusDetail = document.querySelector("#status");
 const betDetail = document.querySelector("#bet-p");
 const playerCardsDetail = document.querySelector("#player-cards-p");
+const totalBox = document.querySelector("#total");
 
 // round
 const gameDetails = document.querySelector("#game-details");
 const startRound = document.querySelector("#start-round");
 const startRoundBtn = document.querySelector("#start-round-btn");
+const hitBtn = document.querySelector("#hit-btn");
+const standBtn = document.querySelector("#stand-btn");
+
+function detailBoxUpdate(obj) {
+  const {
+    roundId,
+    playerCards,
+    dealerUpCard,
+    chips,
+    bet,
+    status,
+    playerTotal,
+  } = obj;
+  if (chips) chipsDetail.textContent = `Chips: ${chips}`;
+  if (bet) betDetail.textContent = `BET: ${bet}`;
+  if (playerCards)
+    playerCardsDetail.textContent = `Player cards: ${playerCards.length}`;
+  if (status) statusDetail.textContent = `status: ${status}`;
+  if (playerTotal) totalBox.textContent = ` ${totalBox}`;
+}
 
 async function activeCurrentRound(obj) {
-  const { roundId, playerCards, dealerUpCard, chips, bet, status } = obj;
-  chipsDetail.textContent = `Chips: ${chips}`;
-  betDetail.textContent = `BET: ${bet}`;
-  playerCardsDetail.textContent = `Player cards: ${playerCards.length}`;
-  statusDetail.textContent = `status: ${status}`;
+  detailBoxUpdate(obj);
+  const {
+    roundId,
+    playerCards,
+    dealerUpCard,
+    chips,
+    bet,
+    status,
+    playerTotal,
+  } = obj;
   const playerBox = document.querySelector("#player-box");
   const dealerBox = document.querySelector("#dealer-box");
 
@@ -96,6 +122,7 @@ async function loadPlayer() {
   }
 }
 
+// betBtn
 startRoundBtn.addEventListener("click", async (e) => {
   e.preventDefault();
   const bet = document.querySelector("#bet");
@@ -109,7 +136,21 @@ startRoundBtn.addEventListener("click", async (e) => {
   });
 
   const result = await call.json();
-  activeRound(result);
+  activeCurrentRound(result);
+});
+
+// hitBtn
+hitBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const call = await fetch("http://localhost:3000/hit", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+      "x-player-id": localPlayerId,
+    },
+  });
+  const result = await call.json();
+  activeCurrentRound(result);
 });
 
 document.addEventListener("DOMContentLoaded", loadGame);
