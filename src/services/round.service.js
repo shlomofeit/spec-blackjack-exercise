@@ -122,6 +122,16 @@ export async function standService(playerId) {
     }
   }
   updatedRound = await roundRepo.statusUpdate(activeRound._id, status);
+  let chipsPayout = 0;
+  if (status === "player_win" || status === "dealer_bust") {
+    chipsPayout = activeRound.bet * 2;
+  } else if (status === "push") {
+    chipsPayout = activeRound.bet;
+  }
+
+  if (chipsPayout > 0) {
+    await playerRepo.chipsUpdate(playerId, -chipsPayout);
+  }
   const player = await playerRepo.getById(playerId);
   return {
     playerCards: updatedRound.playerCards,
