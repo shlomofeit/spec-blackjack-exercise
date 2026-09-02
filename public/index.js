@@ -39,7 +39,7 @@ function detailBoxUpdate(obj) {
   if (playerCards)
     playerCardsDetail.textContent = `Player cards: ${playerCards.length}`;
   if (status) statusDetail.textContent = `status: ${status}`;
-  if (playerTotal) totalBox.textContent = ` ${totalBox}`;
+  if (playerTotal) totalBox.textContent = `Total: ${totalBox}`;
 }
 
 async function activeCurrentRound(obj) {
@@ -151,6 +151,39 @@ hitBtn.addEventListener("click", async (e) => {
   });
   const result = await call.json();
   activeCurrentRound(result);
+});
+
+standBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const call = await fetch("http://localhost:3000/stand", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+      "x-player-id": localPlayerId,
+    },
+  });
+  const result = await call.json();
+
+  const dealerBox = document.querySelector("#dealer-box");
+  dealerBox.innerHTML = "";
+
+  result.dealerCards.forEach((card) => {
+    const divCard = document.createElement("div");
+    const imgCard = document.createElement("img");
+    const numCard = document.createElement("h3");
+    divCard.classList.add("card");
+    imgCard.src = SUIT_ICONS[card.suit];
+    imgCard.classList.add("suit");
+    numCard.textContent = card.rank;
+    numCard.classList.add("rank");
+    divCard.appendChild(imgCard);
+    divCard.appendChild(numCard);
+    dealerBox.appendChild(divCard);
+  });
+
+  detailBoxUpdate(result);
+
+  alert(`Result: ${result.status}\nYour chips: ${result.chips}`);
 });
 
 document.addEventListener("DOMContentLoaded", loadGame);
