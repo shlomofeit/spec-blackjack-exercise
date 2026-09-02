@@ -39,7 +39,7 @@ function detailBoxUpdate(obj) {
   if (playerCards)
     playerCardsDetail.textContent = `Player cards: ${playerCards.length}`;
   if (status) statusDetail.textContent = `status: ${status}`;
-  if (playerTotal) totalBox.textContent = `Total: ${totalBox}`;
+  if (playerTotal) totalBox.textContent = `Total: ${playerTotal}`;
 }
 
 async function activeCurrentRound(obj) {
