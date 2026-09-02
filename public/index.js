@@ -150,7 +150,25 @@ hitBtn.addEventListener("click", async (e) => {
     },
   });
   const result = await call.json();
-  activeCurrentRound(result);
+  const playerBox = document.querySelector("#player-box");
+  playerBox.innerHTML = "";
+  result.playerCards.forEach((card) => {
+    const divCard = document.createElement("div");
+    const imgCard = document.createElement("img");
+    const numCard = document.createElement("h3");
+    divCard.classList.add("card");
+    imgCard.src = SUIT_ICONS[card.suit];
+    imgCard.classList.add("suit");
+    numCard.textContent = card.rank;
+    numCard.classList.add("rank");
+    divCard.appendChild(imgCard);
+    divCard.appendChild(numCard);
+    playerBox.appendChild(divCard);
+  });
+  detailBoxUpdate(result);
+  if (result.status === "player_bust") {
+    alert(`You lost. Your chips now is: ${result.chips}`);
+  }
 });
 
 standBtn.addEventListener("click", async (e) => {
