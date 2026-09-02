@@ -81,6 +81,14 @@ export async function hitService(playerId) {
       chips: player.chips,
     };
   }
+
+  const player = await playerRepo.getById(playerId);
+  return {
+    playerCards: updatedRound.playerCards,
+    playerTotal: totalHand,
+    status: updatedRound.status,
+    chips: player.chips,
+  };
 }
 
 export async function standService(playerId) {
