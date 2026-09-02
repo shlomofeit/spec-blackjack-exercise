@@ -136,7 +136,15 @@ startRoundBtn.addEventListener("click", async (e) => {
   });
 
   const result = await call.json();
+
+  document.querySelector("#player-box").innerHTML = "";
+  document.querySelector("#dealer-box").innerHTML = "";
+
   activeCurrentRound(result);
+  hitBtn.style.display = "block";
+  standBtn.style.display = "block";
+  startRound.style.display = "none";
+  gameDetails.style.display = "block";
 });
 
 // hitBtn
@@ -167,6 +175,10 @@ hitBtn.addEventListener("click", async (e) => {
   });
   detailBoxUpdate(result);
   if (result.status === "player_bust") {
+    hitBtn.style.display = "none";
+    standBtn.style.display = "none";
+    startRound.style.display = "block";
+    gameDetails.style.display = "none";
     alert(`You lost. Your chips now is: ${result.chips}`);
   }
 });
@@ -200,6 +212,11 @@ standBtn.addEventListener("click", async (e) => {
   });
 
   detailBoxUpdate(result);
+
+  hitBtn.style.display = "none";
+  standBtn.style.display = "none";
+  startRound.style.display = "block";
+  gameDetails.style.display = "none";
 
   alert(`Result: ${result.status}\nYour chips: ${result.chips}`);
 });
